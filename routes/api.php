@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\UserController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\RegisterController;
@@ -17,7 +18,7 @@ Route::post('/email/resend', [RegisterController::class, 'send'])->middleware([ 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('user', [RegisterController::class, 'user']);
     Route::post('logout', [RegisterController::class, 'logout']);
-    Route::get('users', [UserController::class, 'index']);
-    Route::delete('users/{user}', [UserController::class, 'destroy']);
+    Route::get('users', [UserController::class, 'index'])->can('viewAny',User::class);
+    Route::delete('users/{userId}', [UserController::class, 'destroy']);
     Route::put('users/{user}', [UserController::class, 'update']);
 });

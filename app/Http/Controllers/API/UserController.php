@@ -4,27 +4,27 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Gate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserController extends BaseController
 {
 
-    public function index(Request $request): JsonResponse
+
+    public function index(): JsonResponse
     {
-        if ($request->user()->cannot('viewAny', User::class)) {
-            abort(403);
-        }
         $users = User::all();
 
         return $this->sendResponse(['users' => UserResource::collection($users)], 'All users retrieved successfully.');
 
     }
 
-    public function destroy(Request $request,User $user): JsonResponse
+    public function destroy(int $userId): JsonResponse
     {
-        if ($request->user()->cannot('delete', User::class)) {
-            abort(403);
+        $user = User::findOrFail($userId);
+        if(!$user){
+            return $this->sendError('User not found.');
         }
         $user->delete();
 

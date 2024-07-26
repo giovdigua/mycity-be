@@ -23,6 +23,6 @@ class UserPolicy
 
     public function viewAny(User $user)
     {
-        return $user->role === 'admin' || $user->role === 'user';
+        return $user->role === 'admin' or $user->role === 'user';
     }
 }
