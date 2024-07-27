@@ -29,7 +29,7 @@ class RegisterController extends BaseController
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'phone_number' => ['required','string', 'regex:/^[\d+]+$/'],//[a-z]{6}[0-9]{2}[a-z]{1}[0-9]{2}[a-z]{1}[0-9]{3}[a-z]{1}$/i
+            'phone_number' => ['required','string', 'regex:/^[\d+]+$/'],
             'fiscal_code' => ['required', 'string', 'size:16', 'regex:/^[a-zA-Z]{6}[0-9]{2}[a-zA-Z]{1}[0-9]{2}[a-zA-Z]{1}[0-9]{3}[a-zA-Z]{1}$/i'],
             'password' => 'required|string|min:8',
             'c_password' => 'required|same:password',
