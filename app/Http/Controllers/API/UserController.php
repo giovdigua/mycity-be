@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Gate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,11 +12,19 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends BaseController
 {
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $users = User::query()->orderBy('created_at','desc')->get();
+        $sortColumn = 'created_at';
+        $sortDirection = 'desc';
+        if ($request->get('sort-surname')) {
+            $sortColumn = 'surname';
+            $sortDirection = $request->get('sort-surname');
+        }
+        $users = User::query()
+            ->select('id', 'name', 'surname', 'email', 'phone_number', 'fiscal_code', 'date_of_birth', 'role')
+            ->orderBy($sortColumn, $sortDirection)->paginate(10);
 
-        return $this->sendResponse(['users' => UserResource::collection($users)], 'All users retrieved successfully.');
+        return $this->sendResponse(['users' => $users], 'All users retrieved successfully.');
     }
 
     public function destroy(int $userId): JsonResponse
@@ -53,6 +60,7 @@ class UserController extends BaseController
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,',id',
             'phone_number' => ['required','string', 'regex:/^[\d+]+$/'],
             'fiscal_code' => ['required', 'string', 'size:16', 'regex:/^[a-zA-Z]{6}[0-9]{2}[a-zA-Z]{1}[0-9]{2}[a-zA-Z]{1}[0-9]{3}[a-zA-Z]{1}$/i'],
+            'date_of_birth' => ['required', 'date'],
         ]);
 
         if($validator->fails()){
