@@ -9,6 +9,11 @@ Come da traccia gli utenti si potranno registrare con tutti i campi richiesti e 
 Una volta registrati partirà email di conferma.Vi è anche la possibilità di fare il resend della mail di conferma (completato da interfaccia su vue).
 Una volta regsitrati e validata la mail l'utente potrà effettuare il login e trovare la lista degli utenti.Se l'utente amministratore potrà elimnare gli altri utenti (non gli altri amministratori ne se stesso) o modificare i campi : 
 name,surname,fiscal_code,email,phone_number e date_of_birth.
+Esgeuire i comandi in ordine.
+In caso si sia precedentemente già installato il progetto eseguire:
+```
+docker compose down -v
+```
 
 Per far partire il progetto una volta scaricata la repo da terminale eseguire:
 ```
@@ -33,6 +38,14 @@ poi eseguire
 Esguire le migrations:
 ```
 ./vendor/bin/sail artisan migrate
+```
+
+Esguire i comand per creare la password key e il personal client
+```
+./vendor/bin/sail artisan passport:keys
+
+./vendor/bin/sail artisan passport:client --personal
+
 ```
 
 Esguire il seed per la creazione di 1000 utenti random
