@@ -14,11 +14,11 @@ class UserSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $faker = Faker::create('it_IT');
 
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 200; $i++) {
             User::create([
                 'name' => $faker->firstName,
                 'surname' => $faker->lastName,
@@ -31,20 +31,22 @@ class UserSeeder extends Seeder
         }
     }
 
-    private function generatePhoneNumber($faker)
+    private function generatePhoneNumber($faker): string
     {
         return '+39' . $faker->numerify('##########');
     }
 
-    private function generateFiscalCode($faker)
+    private function generateFiscalCode($faker): string
     {
-        $name = strtoupper($faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter());
-        $surname = strtoupper($faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter());
-        $year = $faker->numerify('##');
-        $month = strtoupper($faker->randomLetter());
-        $day = $faker->numerify('##');
-        $code = strtoupper($faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter());
+        $fiscalCode = strtoupper($faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter());
+        $fiscalCode.=strtoupper($faker->randomLetter() . $faker->randomLetter() . $faker->randomLetter());
+        $fiscalCode.=$faker->numerify('##');
+        $fiscalCode.=strtoupper($faker->randomLetter());
+        $fiscalCode.=$faker->numerify('##');
+        $fiscalCode.=strtoupper($faker->randomLetter());
+        $fiscalCode.=$faker->numerify('###');
+        $fiscalCode.=strtoupper($faker->randomLetter());
 
-        return $surname . $name . $year . $month . $day . $code;
+        return $fiscalCode;
     }
 }

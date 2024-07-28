@@ -1,66 +1,49 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Istruzioni operative e resoconto di sviluppo
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Per il test ho usato Laravel 11 con Passport per l'autenticazione e una Policy sul Model User per l'autorizzazione.
+Il progetto è stato sviluppato usando Laravel Sail per una completa dockerizzazione.
+Al Sail (seguire eventuali istruzioni sul proprio os https://laravel.com/docs/11.x/installation#docker-installation-using-sail)
+in fase di avvio ho chiesto un db MySql e il package MailPit per la gestione della posta in locale.Aggiunto poi sul docker compose il phpmyadmin comodo per la visone del db.
 
-## About Laravel
+Come da traccia gli utenti si potranno registrare con tutti i campi richiesti e convalidati .
+Una volta registrati partirà email di conferma.Vi è anche la possibilità di fare il resend della mail di conferma (completato da interfaccia su vue).
+Una volta regsitrati e validata la mail l'utente potrà effettuare il login e trovare la lista degli utenti.Se l'utente amministratore potrà elimnare gli altri utenti (non gli altri amministratori ne se stesso) o modificare i campi : 
+name,surname,fiscal_code,email,phone_number e date_of_birth.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Per far partire il progetto una volta scaricata la repo da terminale eseguire: 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+```
+./vendor/bin/sail up
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Esguire le migrations:
+```
+./vendor/bin/sail artisan migrate
+```
 
-## Learning Laravel
+Esguire il seed per la creazione di 1000 utenti random
+```
+./vendor/bin/sail artisan db:seed
+```
+ Si può poi procedere poi alla registrazione di un utente che sarà il nostro utente admin da interfaccia Vue.
+ 
+Una volta registrato l'utente validare la mail arrivata su Mailpit andando su:
+http://localhost:8025
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Poi cambiare il role dell'utente creato in admin da db usando phpmyadmin all'indirizzo:
+http://localhost:8089/ (server:mysql,Nome Utente: sail, password:password);
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Esguire la query per aggiornare il role utente sostituendo tuoindirizzo@mail.com con l'idirizzo mail registrato:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```
+update users set role = 'admin' where email = 'tuoindirizzo@mail.com';
+```
 
-## Laravel Sponsors
+Per il job della creazione del csv aprire un terminale e digitare:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+ ./vendor/bin/sail artisan queue:work
+```
+Poi sul browser andare all'indirizzo http://localhost/export
 
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Per la mail risultato aprire Mailpit http://localhost:8025
