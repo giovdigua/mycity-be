@@ -11,6 +11,16 @@ Una volta regsitrati e validata la mail l'utente potrà effettuare il login e tr
 name,surname,fiscal_code,email,phone_number e date_of_birth.
 
 Per far partire il progetto una volta scaricata la repo da terminale eseguire: 
+```
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php83-composer:latest \
+    composer install --ignore-platform-reqs
+```
+
+poi eseguire
 
 ```
 ./vendor/bin/sail up
