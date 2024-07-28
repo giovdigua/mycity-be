@@ -10,7 +10,7 @@ Una volta registrati partirà email di conferma.Vi è anche la possibilità di f
 Una volta regsitrati e validata la mail l'utente potrà effettuare il login e trovare la lista degli utenti.Se l'utente amministratore potrà elimnare gli altri utenti (non gli altri amministratori ne se stesso) o modificare i campi : 
 name,surname,fiscal_code,email,phone_number e date_of_birth.
 
-Per far partire il progetto una volta scaricata la repo da terminale eseguire: 
+Per far partire il progetto una volta scaricata la repo da terminale eseguire:
 ```
 docker run --rm \
     -u "$(id -u):$(id -g)" \
@@ -18,6 +18,10 @@ docker run --rm \
     -w /var/www/html \
     laravelsail/php83-composer:latest \
     composer install --ignore-platform-reqs
+```
+poi copiare .env.example in .env
+```
+cp .env.example .env
 ```
 
 poi eseguire
